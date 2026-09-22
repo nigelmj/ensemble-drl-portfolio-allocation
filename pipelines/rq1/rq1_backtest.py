@@ -6,13 +6,13 @@ results/baselines/, builds a performance comparison table, equity plots,
 disagreement/confidence timeseries and histograms, cash-weight diagnostics,
 and writes a manifest.
 
-Supports temporary reporting in results/temp/0rq1 for the
+Supports temporary reporting in results/temp/rq1 for the
 equal_weight_stocks ablation (12 combos when SAFE_STRATEGIES includes
 equal_weight_stocks).
 
 Usage:
-    python -m pipelines.rq1.rq1_test --results_root results/temp/0rq1
-    python -m pipelines.rq1.rq1_backtest --results_root results/temp/0rq1
+    python -m pipelines.rq1.rq1_test --results_root results/temp/rq1
+    python -m pipelines.rq1.rq1_backtest --results_root results/temp/rq1
 
 Output:
     <results_root>/backtest_performance_comparison.csv
@@ -80,7 +80,7 @@ def parse_args():
         "--results_root",
         default=rq1_config.RESULTS_ROOT,
         help="Directory with per-combo test_account.csv files. "
-             "Defaults to RESULTS_ROOT; use results/temp/0rq1 for stocks-only ablation.",
+             "Defaults to RESULTS_ROOT; use results/temp/rq1 for stocks-only ablation.",
     )
     parser.add_argument(
         "--use-5m",
@@ -189,12 +189,6 @@ def main():
     fig.savefig(os.path.join(results_root, f"backtest_result{tag}.png"),
                 dpi=150, bbox_inches="tight")
     plt.close(fig)
-    # also write a copy under report with tag
-    try:
-        table.to_csv(os.path.join("results/report", f"rq1_backtest_performance_comparison{tag}.csv"))
-    except OSError as exc:
-        print(f"[warn] could not write the results/report copy of the table: {exc}")
-
     # ---- Disagreement / confidence timeseries (best combo) ----
     summary_path = os.path.join(results_root, "test_summary.csv")
     if not os.path.exists(summary_path):
@@ -380,7 +374,7 @@ def main():
         },
         "outputs": results_root,
         "canonical_results_root": rq1_config.RESULTS_ROOT,
-        "temp_note": "Temporary ablation reporting; 0rq1 unchanged",
+        "temp_note": "Temporary ablation reporting; rq1 unchanged",
     }
     with open(os.path.join(results_root, "manifest.json"), "w") as f:
         json.dump(manifest, f, indent=2)

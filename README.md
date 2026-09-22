@@ -64,6 +64,8 @@ up assigning the ensemble proposal very little weight on most days. Their gain i
 consistent with heavily smoothing the ensemble's positioning at low turnover
 rather than with genuine day-to-day risk modulation.
 
+![Account value of the four disagreement-based confidence mappings against the plain PPO ensemble](figures/rq1_performance_standard_vs_confidence_weighted.png)
+
 **RQ2 — reward diversity.** The three reward variants do produce distinct risk
 profiles, but naive soft or hard blending does not exploit that. Constraining how
 often the selected member can change is what makes the difference.
@@ -76,6 +78,8 @@ often the selected member can change is what makes the difference.
 | Soft blend | 46.7% | 0.57 | −29.8% |
 | Hard blend | 43.4% | 0.53 | −31.4% |
 | Block selector (k=10, 20-day block) | **91.5%** | **0.88** | −26.3% |
+
+![Account value and selected reward variant for the three strongest block-selector configurations](figures/rq2_block_selection_timeline.png)
 
 **RQ3 — algorithm diversity.** All six reward×algorithm permutations have
 shallower drawdowns than the RQ2 ensemble, and three of them also beat its
@@ -94,6 +98,12 @@ Sharpe. V4 is the strongest overall.
 Algorithm diversity improves risk characteristics consistently, but how the
 rewards are assigned across algorithms still matters a great deal — it is not a
 free win from mixing algorithms alone.
+
+![Portfolio value of the six reward-by-algorithm ensembles against the RQ2 ensemble and both baselines](figures/rq3_backtest_all_versions.png)
+
+All eight result plots are in [`figures/`](figures). The plot steps below
+regenerate them into `results/rq1`, `results/rq2` and `results/rq3`; the copies
+committed here are the versions used in the dissertation.
 
 ## How it works
 
@@ -142,6 +152,8 @@ src/rl_portfolio/                 # core library, shared by all experiments
     portfolio_allocation_ensemble_agent.py  # RQ2 trailing-performance blend
     cross_model_ensemble_agent.py           # RQ3 heterogeneous blend
   utils/                          # simplex projection, io, TB callback, backtest stats
+
+figures/                          # result plots, as used in the dissertation
 
 pipelines/                        # runnable experiment steps
   data/                           # download, features, validation, train/test split
@@ -227,8 +239,8 @@ The remaining scripts in each folder (`rq1_beta_*`, `rq1_power_*`,
 read results already written by the steps above and can be run in any order
 afterwards.
 
-Every step writes into its own root (`results/0rq1`, `results/0rq2`,
-`results/0rq3`) and never overwrites another experiment's outputs. The backtest
+Every step writes into its own root (`results/rq1`, `results/rq2`,
+`results/rq3`) and never overwrites another experiment's outputs. The backtest
 steps also write a `manifest.json` recording the training lineage of each member.
 
 ## Caveats

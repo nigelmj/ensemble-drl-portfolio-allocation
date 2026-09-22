@@ -4,7 +4,7 @@ RQ3 — Train the SAC / A2C members.
 SAC and A2C members are trained in RQ3 (PPO members reuse the RQ2
 models). Train sac_log_return and a2c_log_return first, then the dsr pair,
 then the dsr_drawdown pair, each at 1M steps. For the DSR-based members the
-per-algo scaling is taken from results/0rq3/calibration_dsr.json when it
+per-algo scaling is taken from results/rq3/calibration_dsr.json when it
 exists (see rq3_calibrate.py); otherwise the fallback is used.
 
 Usage:
@@ -51,7 +51,7 @@ def parse_args():
                         help="Optional suffix for save paths (e.g. 'smoke').")
     parser.add_argument("--calibration", default=None,
                         help="Path to the calibration JSON to use for DSR "
-                             "scaling (default: results/0rq3/calibration_dsr.json).")
+                             "scaling (default: results/rq3/calibration_dsr.json).")
     return parser.parse_args()
 
 

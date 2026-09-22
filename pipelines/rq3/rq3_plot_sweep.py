@@ -13,13 +13,12 @@ Usage:
     python -m pipelines.rq3.rq3_plot_sweep --version v4
 
 Output:
-    results/0rq3/sweeps/{version}_ensemble_selection_timeline.png (6 files)
+    results/rq3/sweeps/{version}_ensemble_selection_timeline.png (6 files)
 """
 from __future__ import annotations
 
 import os
 import argparse
-import shutil
 
 import matplotlib
 matplotlib.use("Agg")
@@ -29,8 +28,8 @@ from matplotlib.transforms import blended_transform_factory
 import pandas as pd
 
 
-SWEEP_DIR = "results/0rq3/sweeps"
-RQ3_ROOT = "results/0rq3"
+SWEEP_DIR = "results/rq3/sweeps"
+RQ3_ROOT = "results/rq3"
 
 # Colours for the three members (PPO / SAC / A2C).
 MEMBER_COLORS = {
@@ -99,7 +98,7 @@ def plot_version(version: str):
         ax_top.plot(df["date"], df["portfolio_value"], label=_disp_tag(version, tag), color=color, lw=1.4)
 
     # RQ2 floor for reference
-    rq2_path = "results/0rq2/sweeps/account_value_ensemble_pa_k10b20.csv"
+    rq2_path = "results/rq2/sweeps/account_value_ensemble_pa_k10b20.csv"
     if os.path.exists(rq2_path):
         rq2 = pd.read_csv(rq2_path)
         rq2["date"] = pd.to_datetime(rq2["date"])
@@ -160,14 +159,6 @@ def plot_version(version: str):
     fig.savefig(out, dpi=300, bbox_inches="tight")
     plt.close(fig)
     print(f"  Saved to {out}")
-    # also copy to report
-    rpt = f"results/report/rq3_sweep_timeline_{version}.png"
-    try:
-        os.makedirs("results/report", exist_ok=True)
-        shutil.copy(out, rpt)
-        print(f"  Copied to {rpt}")
-    except Exception as e:
-        print(f"  Warning copy failed: {e}")
 
 
 def main():

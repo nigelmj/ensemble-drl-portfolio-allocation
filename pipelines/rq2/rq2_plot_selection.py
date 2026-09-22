@@ -1,7 +1,7 @@
 """
 RQ2 — Plot which reward-variant model is selected, by period, during trading.
 
-Auto-discovers every results/0rq2*/sweeps/ensemble_sweep_summary.csv, picks the
+Auto-discovers every results/rq2*/sweeps/ensemble_sweep_summary.csv, picks the
 top 3 block configs by Sharpe from each summary, and plots the account-value
 curves (top) and a Gantt-style timeline (bottom) of which agent the ensemble
 selected at each point in time for those top-3 configs.
@@ -11,7 +11,7 @@ Usage:
     python -m pipelines.rq2.rq2_plot_selection
 
 Output:
-    results/0rq2*/sweeps/ensemble_selection_timeline.png (one per folder)
+    results/rq2*/sweeps/ensemble_selection_timeline.png (one per folder)
 """
 from __future__ import annotations
 
@@ -42,7 +42,7 @@ BLOCK_COLORS = ["black", "#2ca02c", "#ff7f0e"]  # k10b20 black, then green, oran
 
 def find_sweep_roots() -> list[str]:
     summary_paths = sorted(
-        glob.glob("results/0rq2*/sweeps/ensemble_sweep_summary.csv")
+        glob.glob("results/rq2*/sweeps/ensemble_sweep_summary.csv")
     )
     return [os.path.dirname(os.path.dirname(p)) for p in summary_paths]
 
@@ -183,7 +183,7 @@ def plot_root(root: str):
 def main():
     roots = find_sweep_roots()
     if not roots:
-        print("No results/0rq2*/sweeps/ensemble_sweep_summary.csv found.")
+        print("No results/rq2*/sweeps/ensemble_sweep_summary.csv found.")
         return
     for root in roots:
         plot_root(root)

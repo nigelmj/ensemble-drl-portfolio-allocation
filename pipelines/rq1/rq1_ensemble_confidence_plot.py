@@ -7,15 +7,14 @@ RQ1 — Performance of PPO ensemble and Confidence-Weighted PPO Ensembles
 as requested.
 
 Data:
-  results/0rq1/baseline_ensemble_average/test_account.csv
-  results/0rq1/combo_linear_previous/test_account.csv
-  results/0rq1/combo_power_previous/test_account.csv
-  results/0rq1/combo_exponential_previous/test_account.csv
-  results/0rq1/combo_sigmoid_previous/test_account.csv
+  results/rq1/baseline_ensemble_average/test_account.csv
+  results/rq1/combo_linear_previous/test_account.csv
+  results/rq1/combo_power_previous/test_account.csv
+  results/rq1/combo_exponential_previous/test_account.csv
+  results/rq1/combo_sigmoid_previous/test_account.csv
 
 Output:
-  results/0rq1/performance_standard_vs_confidence_weighted.png
-  results/report/rq1_performance_standard_vs_confidence_weighted.png
+  results/rq1/performance_standard_vs_confidence_weighted.png
   + corresponding CSVs
 
 Usage:
@@ -35,7 +34,6 @@ from pipelines.rq1 import rq1_config
 from rl_portfolio.utils.metrics import backtest_stats
 
 RESULTS_ROOT = rq1_config.RESULTS_ROOT
-REPORT_ROOT = "results/report"
 
 
 def load_account(path: str, col: str) -> pd.DataFrame:
@@ -46,7 +44,6 @@ def load_account(path: str, col: str) -> pd.DataFrame:
 
 
 def main():
-    os.makedirs(REPORT_ROOT, exist_ok=True)
 
     basic_path = os.path.join(RESULTS_ROOT, "baseline_ensemble_average", "test_account.csv")
     paths = {
@@ -82,11 +79,8 @@ def main():
     print(table)
 
     table_path_0 = os.path.join(RESULTS_ROOT, "performance_standard_vs_confidence_weighted.csv")
-    table_path_r = os.path.join(REPORT_ROOT, "rq1_performance_standard_vs_confidence_weighted.csv")
     table.to_csv(table_path_0)
-    table.to_csv(table_path_r)
     print(f"Saved {table_path_0}")
-    print(f"Saved {table_path_r}")
 
     # Plot — same styling as simple baseline plot
     fig, ax = plt.subplots(figsize=(15, 6))
@@ -125,12 +119,9 @@ def main():
 
     fig.tight_layout()
     out_0 = os.path.join(RESULTS_ROOT, "performance_standard_vs_confidence_weighted.png")
-    out_r = os.path.join(REPORT_ROOT, "rq1_performance_standard_vs_confidence_weighted.png")
     fig.savefig(out_0, dpi=150, bbox_inches="tight")
-    fig.savefig(out_r, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved {out_0} ({os.path.getsize(out_0)} bytes)")
-    print(f"Saved {out_r} ({os.path.getsize(out_r)} bytes)")
     print("Done.")
 
 

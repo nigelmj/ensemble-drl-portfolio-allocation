@@ -3,18 +3,16 @@ RQ3 — Underwater (drawdown-over-time) plot, sweep-best versions + RQ2 floor on
 
 Source:
   per-version Sharpe-best k×block from sweeps:
-    results/0rq3/sweeps/sweep_summary_{v}.csv  -> tag
-    results/0rq3/sweeps/account_value_{v}_{tag}.csv
+    results/rq3/sweeps/sweep_summary_{v}.csv  -> tag
+    results/rq3/sweeps/account_value_{v}_{tag}.csv
   RQ2 floor:
-    results/0rq2/sweeps/account_value_ensemble_pa_k10b20.csv
+    results/rq2/sweeps/account_value_ensemble_pa_k10b20.csv
 
   No baselines.
 
 Output:
-  results/0rq3/rq3_underwater.png
-  results/report/rq3_underwater.png
-  results/0rq3/rq3_underwater.csv
-  results/report/rq3_underwater.csv
+  results/rq3/rq3_underwater.png
+  results/rq3/rq3_underwater.csv
 
 Usage:
   python -m pipelines.rq3.rq3_underwater
@@ -40,11 +38,10 @@ import pandas as pd
 from pipelines.rq3 import rq3_config
 
 RESULTS_ROOT = rq3_config.RESULTS_ROOT
-REPORT_ROOT = "results/report"
 
 RQ2_LABEL = "RQ2 k10b20"
 RQ2_LABEL_DISPLAY = rq3_config.RQ2_BLOCK_LABEL_DISPLAY
-RQ2_PATH = "results/0rq2/sweeps/account_value_ensemble_pa_k10b20.csv"
+RQ2_PATH = "results/rq2/sweeps/account_value_ensemble_pa_k10b20.csv"
 VERSION_ORDER = rq3_config.VERSION_ORDER
 VERSION_ORDER_DISPLAY = ["V1", "V2", "V3", "V4", "V5", "V6"]
 def _disp_v(v: str) -> str:
@@ -98,7 +95,6 @@ def resolve_top_tags() -> dict[str, str]:
 
 
 def main():
-    os.makedirs(REPORT_ROOT, exist_ok=True)
     os.makedirs(RESULTS_ROOT, exist_ok=True)
 
     top_tags = resolve_top_tags()
@@ -119,8 +115,8 @@ def main():
         print(f"{v} ({tag}): {len(accounts[v])} rows {accounts[v]['date'].iloc[0]} -> {accounts[v]['date'].iloc[-1]}")
 
     if not os.path.exists(RQ2_PATH):
-        # try glob fallback results/0rq2*/sweeps/...
-        cands = glob.glob("results/0rq2*/sweeps/account_value_ensemble_pa_k10b20.csv")
+        # try glob fallback results/rq2*/sweeps/...
+        cands = glob.glob("results/rq2*/sweeps/account_value_ensemble_pa_k10b20.csv")
         if cands:
             rq2_path = sorted(cands)[0]
             print(f"[note] {RQ2_PATH} not found, using {rq2_path}")
@@ -173,11 +169,8 @@ def main():
 
     # save CSV (fractions, not percent, for numeric precision; plot shows %)
     csv_out = os.path.join(RESULTS_ROOT, "rq3_underwater.csv")
-    csv_report = os.path.join(REPORT_ROOT, "rq3_underwater.csv")
     dd.to_csv(csv_out, index=False)
-    dd.to_csv(csv_report, index=False)
     print(f"\nSaved {csv_out}")
-    print(f"Saved {csv_report}")
 
     # plot - use display labels only
     fig, ax = plt.subplots(figsize=(15, 5))
@@ -203,12 +196,9 @@ def main():
 
     fig.tight_layout()
     png_out = os.path.join(RESULTS_ROOT, "rq3_underwater.png")
-    png_report = os.path.join(REPORT_ROOT, "rq3_underwater.png")
     fig.savefig(png_out, dpi=300, bbox_inches="tight")
-    fig.savefig(png_report, dpi=300, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved {png_out} ({os.path.getsize(png_out)} bytes)")
-    print(f"Saved {png_report} ({os.path.getsize(png_report)} bytes)")
     print("Done.")
 
 

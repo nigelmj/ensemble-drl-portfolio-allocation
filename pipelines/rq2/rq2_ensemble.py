@@ -11,9 +11,9 @@ Usage:
     python -m pipelines.rq2.rq2_ensemble --mode block --k 10 --block-days 20 --tag k10b20
 
 Output:
-    results/0rq2/account_value_ensemble_pa{_tag}.csv
-    results/0rq2/actions_ensemble_pa{_tag}.csv
-    results/0rq2/ensemble_agent_weights{_tag}.csv
+    results/rq2/account_value_ensemble_pa{_tag}.csv
+    results/rq2/actions_ensemble_pa{_tag}.csv
+    results/rq2/ensemble_agent_weights{_tag}.csv
 """
 from __future__ import annotations
 

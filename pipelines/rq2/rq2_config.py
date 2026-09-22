@@ -6,7 +6,7 @@ reward_scaling_dsr=5.0 and dsr_eta_dd=1400, plus RQ2 output roots.
 
 Outputs (never overwrite existing results/models):
     models   -> rq_trained_models/rq2/
-    results  -> results/0rq2/
+    results  -> results/rq2/
 """
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ TOTAL_TIMESTEPS = 1_000_000
 
 DATA_DIR = "data"
 MODEL_DIR = "rq_trained_models/rq2"
-RESULTS_ROOT = "results/0rq2"
+RESULTS_ROOT = "results/rq2"
 DATA_TRAIN = f"{DATA_DIR}/portfolio_allocation_train.pkl"
 DATA_TEST = f"{DATA_DIR}/portfolio_allocation_test.pkl"
 

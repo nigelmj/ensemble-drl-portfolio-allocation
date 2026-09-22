@@ -10,8 +10,8 @@ Usage:
     python -m pipelines.rq1.rq1_validate
 
 Output:
-    results/0rq1/calibration_all.json
-    results/0rq1/validation_disagreements.csv
+    results/rq1/calibration_all.json
+    results/rq1/validation_disagreements.csv
 """
 from __future__ import annotations
 

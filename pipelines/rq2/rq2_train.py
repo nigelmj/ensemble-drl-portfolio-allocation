@@ -15,7 +15,7 @@ Usage:
 
 Output:
     rq_trained_models/rq2/agent_ppo_pa_{log_return,dsr,dsr_drawdown}{_tag}.zip
-    results/0rq2/ppo_pa_{reward_type}{_tag}/... (TensorBoard + CSV logs)
+    results/rq2/ppo_pa_{reward_type}{_tag}/... (TensorBoard + CSV logs)
 """
 from __future__ import annotations
 

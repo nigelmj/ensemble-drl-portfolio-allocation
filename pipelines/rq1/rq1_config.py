@@ -7,7 +7,7 @@ completely untouched.
 
 Outputs (never overwrite existing results/models):
     models   -> rq_trained_models/rq1/
-    results  -> results/0rq1/
+    results  -> results/rq1/
 """
 from __future__ import annotations
 
@@ -33,8 +33,8 @@ BETA_GRID = [10, 20, 30, 40, 60, 80, 100]
 CONFIDENCE_MAPPINGS = ["linear", "power", "exponential", "sigmoid"]
 SAFE_STRATEGIES = ["previous", "equal_weight", "equal_weight_stocks"]
 
-# Temporary reporting for stocks-only ablation (does not overwrite 0rq1)
-TEMP_RESULTS_ROOT = "results/temp/0rq1"
+# Temporary reporting for stocks-only ablation (does not overwrite rq1)
+TEMP_RESULTS_ROOT = "results/temp/rq1"
 
 D_REF_METHODS = ["mean", "median", "p75", "p90", "p95"]
 
@@ -43,7 +43,7 @@ VAL_END = "2021-12-31"
 
 DATA_DIR = "data"
 MODEL_DIR = "rq_trained_models/rq1"
-RESULTS_ROOT = "results/0rq1"
+RESULTS_ROOT = "results/rq1"
 DATA_TRAIN = f"{DATA_DIR}/portfolio_allocation_train.pkl"
 DATA_TEST = f"{DATA_DIR}/portfolio_allocation_test.pkl"
 

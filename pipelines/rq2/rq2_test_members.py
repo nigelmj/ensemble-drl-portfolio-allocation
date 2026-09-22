@@ -6,9 +6,9 @@ Usage:
     python -m pipelines.rq2.rq2_test_members
 
 Output:
-    results/0rq2/account_value_ppo_pa_{logreturn,dsr,dsr_drawdown}{_tag}.csv
-    results/0rq2/actions_ppo_pa_{logreturn,dsr,dsr_drawdown}{_tag}.csv
-    results/0rq2/portfolio_stats_ppo_pa_{logreturn,dsr,dsr_drawdown}{_tag}.csv
+    results/rq2/account_value_ppo_pa_{logreturn,dsr,dsr_drawdown}{_tag}.csv
+    results/rq2/actions_ppo_pa_{logreturn,dsr,dsr_drawdown}{_tag}.csv
+    results/rq2/portfolio_stats_ppo_pa_{logreturn,dsr,dsr_drawdown}{_tag}.csv
 """
 from __future__ import annotations
 

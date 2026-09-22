@@ -11,16 +11,15 @@ Usage:
     python -m pipelines.rq3.rq3_backtest
 
 Output:
-    results/0rq3/backtest_performance_comparison.csv
-    results/0rq3/backtest_all_versions.png
-    results/0rq3/manifest.json
+    results/rq3/backtest_performance_comparison.csv
+    results/rq3/backtest_all_versions.png
+    results/rq3/manifest.json
 """
 from __future__ import annotations
 
 import json
 import os
 import argparse
-import shutil
 
 import matplotlib
 
@@ -36,7 +35,7 @@ from rl_portfolio.config import RESULTS_DIR
 from rl_portfolio.utils.io import check_and_make_directories
 from rl_portfolio.utils.metrics import backtest_stats
 
-RQ2_K10B20_ACCOUNT = "results/0rq2/sweeps/account_value_ensemble_pa_k10b20.csv"
+RQ2_K10B20_ACCOUNT = "results/rq2/sweeps/account_value_ensemble_pa_k10b20.csv"
 RQ2_K10B20_LABEL = rq3_config.RQ2_BLOCK_LABEL
 RQ2_K10B20_LABEL_DISPLAY = rq3_config.RQ2_BLOCK_LABEL_DISPLAY
 VERSION_LABELS = rq3_config.VERSION_LABELS
@@ -86,8 +85,6 @@ def main():
     out_csv = f"{rq3_config.RESULTS_ROOT}/backtest_performance_comparison{'_top' if use_top else ''}.csv"
     out_png = f"{rq3_config.RESULTS_ROOT}/backtest_all_versions{'_top' if use_top else ''}.png"
     # keep report copies consistent
-    out_csv_report = f"results/report/rq3_backtest_performance_comparison{'_top' if use_top else ''}.csv"
-    out_png_report = f"results/report/rq3_backtest_all_versions{'_top' if use_top else ''}.png"
 
     check_and_make_directories([RESULTS_DIR, rq3_config.RESULTS_ROOT])
 
@@ -166,13 +163,6 @@ def main():
         series.append(backtest_stats(df, value_col_name="account_value").rename(col))
     table = pd.concat(series, axis=1).round(4)
     table.to_csv(out_csv)
-    # also copy to report
-    try:
-        os.makedirs("results/report", exist_ok=True)
-        shutil.copy(out_csv, out_csv_report)
-        print(f"Saved report copy to {out_csv_report}")
-    except Exception as e:
-        print(f"Warning copy to report failed: {e}")
     print(f"\n=== RQ3 Performance Comparison ({'top sweep' if use_top else 'all versions'}) ===")
     print(table)
 
@@ -215,13 +205,6 @@ def main():
     ax.legend(handles_cm, labels_cm, loc="upper left", fontsize=8, ncol=2)
     ax.grid(True, alpha=0.3)
     fig.savefig(out_png, dpi=300, bbox_inches="tight")
-    # report copy
-    try:
-        os.makedirs("results/report", exist_ok=True)
-        shutil.copy(out_png, out_png_report)
-        print(f"Saved report copy to {out_png_report}")
-    except Exception as e:
-        print(f"Warning copy to report failed: {e}")
     plt.close(fig)
     print(f"\nSaved plot to {out_png}")
 
@@ -252,7 +235,7 @@ def main():
             },
             "blend": {"mode": "block", "k": 10, "block_days": 20},
             "baselines": {"source": "results/baselines/ (compute_baselines.py)"},
-            "comparison_floor": "results/0rq2/sweeps/account_value_ensemble_pa_k10b20.csv",
+            "comparison_floor": "results/rq2/sweeps/account_value_ensemble_pa_k10b20.csv",
             "outputs": rq3_config.RESULTS_ROOT,
         }
         with open(f"{rq3_config.RESULTS_ROOT}/manifest.json", "w") as f:
@@ -271,8 +254,7 @@ def main():
                 for v in versions
             },
             "blend": "per-version Sharpe-best k*b* from sweeps/sweep_summary_{version}.csv",
-            "comparison_floor": "results/0rq2/sweeps/account_value_ensemble_pa_k10b20.csv",
-            "outputs": {"png": out_png, "csv": out_csv, "report": [out_png_report, out_csv_report]},
+            "comparison_floor": "results/rq2/sweeps/account_value_ensemble_pa_k10b20.csv",
         }
         with open(f"{rq3_config.RESULTS_ROOT}/manifest_top.json", "w") as f:
             json.dump(manifest_top, f, indent=2)

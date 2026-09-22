@@ -8,10 +8,10 @@ Single beta shared by both mappings, centred on delta=1:
     exponential: c = clip(exp(-beta*(delta-1)),0,1)
     sigmoid:     c = 1/(1+exp(beta*(delta-1)))   delta=D/D_ref
 
-Produces isolated outputs so canonical results/0rq1 untouched:
-    results/0rq1_beta{beta}/combo_exponential_{safe}/ {test_account.csv, test_actions.csv}
-    results/0rq1_beta{beta}/combo_sigmoid_{safe}/ ...
-    results/0rq1_beta{beta}/test_summary.csv, calibration copy, manifest
+Produces isolated outputs so canonical results/rq1 untouched:
+    results/rq1_beta{beta}/combo_exponential_{safe}/ {test_account.csv, test_actions.csv}
+    results/rq1_beta{beta}/combo_sigmoid_{safe}/ ...
+    results/rq1_beta{beta}/test_summary.csv, calibration copy, manifest
 
 Default betas = BETA_GRID {10,20,30,40,60,80,100}; usually run after picking
 one beta from rq1_beta_calibration.py. Supports single-beta or full grid.
@@ -88,13 +88,13 @@ def main():
 
     for beta in args.betas:
         b_str = str(int(beta)) if float(beta).is_integer() else str(beta).replace(".", "p")
-        results_root = f"results/0rq1_beta{b_str}"
+        results_root = f"results/rq1_beta{b_str}"
         check_and_make_directories([results_root])
         dst_cal = os.path.join(results_root, "calibration_all.json")
         if not os.path.exists(dst_cal):
             shutil.copy(cal_path, dst_cal)
         # copy calibration report for the run record if exists
-        cal_report = "results/0rq1_beta_calibration/beta_sweep_summary.csv"
+        cal_report = "results/rq1_beta_calibration/beta_sweep_summary.csv"
         if os.path.exists(cal_report):
             try:
                 shutil.copy(cal_report, os.path.join(results_root, "beta_calibration_summary.csv"))
@@ -116,7 +116,7 @@ def main():
                 "exponential": "c = clip(exp(-beta*(delta-1)),0,1), delta=D/D_ref",
                 "sigmoid": "c = 1/(1+exp(beta*(delta-1)))",
             },
-            "note": "Isolated so canonical results/0rq1 untouched; separate test_summary per beta. Pick beta from calibration (rq1_beta_calibration.py) not test.",
+            "note": "Isolated so canonical results/rq1 untouched; separate test_summary per beta. Pick beta from calibration (rq1_beta_calibration.py) not test.",
         }
         with open(os.path.join(results_root, "manifest.json"), "w") as f:
             json.dump(manifest, f, indent=2)

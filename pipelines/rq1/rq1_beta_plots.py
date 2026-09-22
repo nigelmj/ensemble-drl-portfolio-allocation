@@ -1,10 +1,9 @@
 """
 RQ1 beta plots — per-beta account-value curves + disagreement-confidence twin timeseries.
 
-Per-beta isolated outputs (never touches results/0rq1):
-  results/0rq1_beta{beta}/equity_beta{beta}.png
-  results/0rq1_beta{beta}/disagreement_confidence_twin_beta{beta}.png
-  (+ copies to results/report/rq1_beta_equity_{beta}.png etc.)
+Per-beta isolated outputs (never touches results/rq1):
+  results/rq1_beta{beta}/equity_beta{beta}.png
+  results/rq1_beta{beta}/disagreement_confidence_twin_beta{beta}.png
 
 Equity per beta: 4 combos (exponential/sigmoid × previous/equal_weight) + PPO ensemble baseline (black).
 Twin per beta: 2×2 grid (row=mapping, col=safe) twin-axis D (left, steelblue) + c (right, darkgreen).
@@ -31,7 +30,6 @@ import pandas as pd
 from pipelines.rq1 import rq1_config
 
 RESULTS_ROOT = rq1_config.RESULTS_ROOT  # canonical, read-only for baseline + calibration
-REPORT_ROOT = "results/report"
 BETA_GRID = rq1_config.BETA_GRID
 MAPPINGS = ["exponential", "sigmoid"]
 SAFES = ["previous", "equal_weight"]
@@ -43,7 +41,7 @@ COLOR_ENSEMBLE = "black"
 def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--betas", nargs="+", type=float, default=None,
-                   help="Betas to plot (default: top-3 by Sharpe among existing 0rq1_beta dirs, else BETA_GRID top3)")
+                   help="Betas to plot (default: top-3 by Sharpe among existing rq1_beta dirs, else BETA_GRID top3)")
     p.add_argument("--mappings", nargs="+", default=MAPPINGS, choices=MAPPINGS,
                    help="Mappings (default: exponential sigmoid)")
     p.add_argument("--safes", nargs="+", default=SAFES,
@@ -62,8 +60,8 @@ def beta_str(b: float) -> str:
 def discover_existing_betas() -> list[float]:
     betas = []
     for name in os.listdir("results"):
-        if name.startswith("0rq1_beta") and not name.startswith("0rq1_beta_calibration"):
-            suf = name.replace("0rq1_beta", "")
+        if name.startswith("rq1_beta") and not name.startswith("rq1_beta_calibration"):
+            suf = name.replace("rq1_beta", "")
             try:
                 # directory suffixes are "10", "10p5", ... ("p" is the decimal point)
                 betas.append(float(suf.replace("p", ".")))
@@ -76,7 +74,7 @@ def pick_top3_by_sharpe(candidates: list[float]) -> list[float]:
     scored = []
     for b in candidates:
         bs = beta_str(b)
-        path = f"results/0rq1_beta{bs}/test_summary.csv"
+        path = f"results/rq1_beta{bs}/test_summary.csv"
         if not os.path.exists(path):
             continue
         try:
@@ -100,7 +98,7 @@ def load_account(path: str) -> pd.DataFrame:
 
 def plot_equity_per_beta(beta: float, mappings, safes):
     bs = beta_str(beta)
-    results_root = f"results/0rq1_beta{bs}"
+    results_root = f"results/rq1_beta{bs}"
     # baseline ensemble (canonical)
     base_path = os.path.join(RESULTS_ROOT, "baseline_ensemble_average", "test_account.csv")
     if not os.path.exists(base_path):
@@ -169,13 +167,9 @@ def plot_equity_per_beta(beta: float, mappings, safes):
 
     fig.tight_layout()
     out = os.path.join(results_root, f"equity_beta{bs}.png")
-    out_r = os.path.join(REPORT_ROOT, f"rq1_beta_equity_{bs}.png")
-    os.makedirs(REPORT_ROOT, exist_ok=True)
     fig.savefig(out, dpi=150, bbox_inches="tight")
-    fig.savefig(out_r, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved {out} ({os.path.getsize(out)} bytes)")
-    print(f"Saved {out_r}")
 
     # print table
     print(f"Beta {bs} final values:")
@@ -185,7 +179,7 @@ def plot_equity_per_beta(beta: float, mappings, safes):
 
 def plot_twin_per_beta(beta: float, mappings, safes):
     bs = beta_str(beta)
-    results_root = f"results/0rq1_beta{bs}"
+    results_root = f"results/rq1_beta{bs}"
     # 2x2 grid: rows=mappings, cols=safes
     nrows = len(mappings)
     ncols = len(safes)
@@ -236,18 +230,13 @@ def plot_twin_per_beta(beta: float, mappings, safes):
     fig.suptitle(f"RQ1 Beta {bs} — Disagreement & Confidence (Test, p90)  [{results_root}]", fontsize=16)
     fig.tight_layout(rect=[0, 0.03, 1, 0.96])
     out = os.path.join(results_root, f"disagreement_confidence_twin_beta{bs}.png")
-    out_r = os.path.join(REPORT_ROOT, f"rq1_beta_twin_{bs}.png")
-    os.makedirs(REPORT_ROOT, exist_ok=True)
     fig.savefig(out, dpi=150, bbox_inches="tight")
-    fig.savefig(out_r, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved {out} ({os.path.getsize(out)} bytes)")
-    print(f"Saved {out_r}")
 
 
 def main():
     args = parse_args()
-    os.makedirs(REPORT_ROOT, exist_ok=True)
 
     # discover or use provided betas
     if args.betas is None:
@@ -273,10 +262,10 @@ def main():
     valid = []
     for b in betas:
         bs = beta_str(b)
-        if os.path.isdir(f"results/0rq1_beta{bs}"):
+        if os.path.isdir(f"results/rq1_beta{bs}"):
             valid.append(b)
         else:
-            print(f"[skip] no dir results/0rq1_beta{bs}")
+            print(f"[skip] no dir results/rq1_beta{bs}")
     if not valid:
         raise SystemExit(f"No valid beta dirs for {betas}")
     betas = valid
@@ -288,7 +277,7 @@ def main():
         if not args.no_twin:
             plot_twin_per_beta(beta, args.mappings, args.safes)
 
-    print("Done. Per-beta outputs in results/0rq1_beta{beta}/, copies in results/report/rq1_beta_*")
+    print("Done. Per-beta outputs in results/rq1_beta{beta}/")
 
 
 if __name__ == "__main__":

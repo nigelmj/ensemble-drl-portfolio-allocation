@@ -2,16 +2,15 @@
 RQ1: Equity plot comparing Power p=2, p=16, p=32 vs Linear vs PPO ensemble.
 
 Reads 5 test_account.csv series (all equal_weight safe for the 4 mapped combos):
- - results/0rq1/combo_power_equal_weight/test_account.csv          (p2 canonical)
- - results/0rq1_power16/combo_power16_equal_weight/test_account.csv (p16)
- - results/0rq1_power32/combo_power32_equal_weight/test_account.csv (p32)
- - results/0rq1/combo_linear_equal_weight/test_account.csv         (linear)
- - results/0rq1/baseline_ensemble_average/test_account.csv         (basic ensemble avg, no safe/confidence)
+ - results/rq1/combo_power_equal_weight/test_account.csv          (p2 canonical)
+ - results/rq1_power16/combo_power16_equal_weight/test_account.csv (p16)
+ - results/rq1_power32/combo_power32_equal_weight/test_account.csv (p32)
+ - results/rq1/combo_linear_equal_weight/test_account.csv         (linear)
+ - results/rq1/baseline_ensemble_average/test_account.csv         (basic ensemble avg, no safe/confidence)
 
 Saves:
- - results/0rq1/power_comparison_p2_p16_p32_linear_baseline.png
- - results/report/rq1_power_comparison_p2_p16_p32_linear_baseline.png
- - plus a sweep isolate copy under results/0rq1_power16/
+ - results/rq1/power_comparison_p2_p16_p32_linear_baseline.png
+ - plus a sweep isolate copy under results/rq1_power16/
 """
 import os
 import matplotlib
@@ -24,11 +23,11 @@ def load(path):
     df["date"] = pd.to_datetime(df["date"])
     return df.set_index("date")["portfolio_value"]
 
-base = "results/0rq1/combo_power_equal_weight/test_account.csv"
-p16 = "results/0rq1_power16/combo_power16_equal_weight/test_account.csv"
-p32 = "results/0rq1_power32/combo_power32_equal_weight/test_account.csv"
-linear = "results/0rq1/combo_linear_equal_weight/test_account.csv"
-baseline = "results/0rq1/baseline_ensemble_average/test_account.csv"
+base = "results/rq1/combo_power_equal_weight/test_account.csv"
+p16 = "results/rq1_power16/combo_power16_equal_weight/test_account.csv"
+p32 = "results/rq1_power32/combo_power32_equal_weight/test_account.csv"
+linear = "results/rq1/combo_linear_equal_weight/test_account.csv"
+baseline = "results/rq1/baseline_ensemble_average/test_account.csv"
 
 series = {
     "PPO ensemble": load(baseline),
@@ -81,9 +80,8 @@ ax.legend(fontsize=11, ncol=2, loc="upper left")
 fig.tight_layout()
 
 outs = [
-    "results/0rq1/power_comparison_p2_p16_p32_linear_baseline.png",
-    "results/0rq1_power16/power_comparison_p2_p16_p32_linear_baseline.png",
-    "results/report/rq1_power_comparison_p2_p16_p32_linear_baseline.png",
+    "results/rq1/power_comparison_p2_p16_p32_linear_baseline.png",
+    "results/rq1_power16/power_comparison_p2_p16_p32_linear_baseline.png",
 ]
 for o in outs:
     os.makedirs(os.path.dirname(o), exist_ok=True)

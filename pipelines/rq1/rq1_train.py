@@ -16,7 +16,7 @@ Output:
     rq_trained_models/rq1/ppo_0.zip .. ppo_{N-1}.zip
     rq_trained_models/rq1/ppo_single.zip          (1M)
     rq_trained_models/rq1/ppo_single_5m.zip       (5M, compute-matched)
-    results/0rq1/tb/...
+    results/rq1/tb/...
 """
 from __future__ import annotations
 

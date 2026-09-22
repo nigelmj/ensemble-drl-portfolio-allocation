@@ -12,12 +12,11 @@ Reports mean/std/min/max/p10/p90 per (mapping,beta) — calibration
 only, so beta is picked without peeking at test (2022-2026).
 Linear/power are included as reference but unchanged.
 
-No model loading, no test window, no overwrite of results/0rq1.
+No model loading, no test window, no overwrite of results/rq1.
 Outputs:
-    results/0rq1_beta_calibration/beta_sweep_summary.csv
-    results/0rq1_beta_calibration/validation_disagreement_hist.png
-    results/0rq1_beta_calibration/calibration_curves.png
-Copies also to results/report/rq1_beta_*
+    results/rq1_beta_calibration/beta_sweep_summary.csv
+    results/rq1_beta_calibration/validation_disagreement_hist.png
+    results/rq1_beta_calibration/calibration_curves.png
 
 Usage:
     python -m pipelines.rq1.rq1_beta_calibration
@@ -35,11 +34,10 @@ import pandas as pd
 
 from pipelines.rq1 import rq1_config
 
-RESULTS_ROOT = rq1_config.RESULTS_ROOT  # results/0rq1 (read-only)
+RESULTS_ROOT = rq1_config.RESULTS_ROOT  # results/rq1 (read-only)
 CAL_PATH = os.path.join(RESULTS_ROOT, "calibration_all.json")
 VAL_CSV = os.path.join(RESULTS_ROOT, "validation_disagreements.csv")
-OUT_ROOT = "results/0rq1_beta_calibration"
-REPORT_ROOT = "results/report"
+OUT_ROOT = "results/rq1_beta_calibration"
 
 DEFAULT_BETAS = rq1_config.BETA_GRID  # [10,20,30,40,60,80,100]
 
@@ -66,7 +64,6 @@ def main():
     args = parse_args()
     betas = [float(b) for b in args.betas]
     os.makedirs(OUT_ROOT, exist_ok=True)
-    os.makedirs(REPORT_ROOT, exist_ok=True)
 
     if not os.path.exists(CAL_PATH):
         raise FileNotFoundError(f"Missing {CAL_PATH} — run rq1_validate.py first")
@@ -130,10 +127,7 @@ def main():
 
     out_csv = os.path.join(OUT_ROOT, "beta_sweep_summary.csv")
     df.to_csv(out_csv, index=False, float_format="%.6f")
-    report_csv = os.path.join(REPORT_ROOT, "rq1_beta_calibration_summary.csv")
-    df.to_csv(report_csv, index=False, float_format="%.6f")
     print(f"\nSaved {out_csv}")
-    print(f"Saved {report_csv}")
 
     pd.set_option("display.max_rows", 100)
     pd.set_option("display.float_format", lambda x: f"{x:.5f}")
@@ -175,12 +169,9 @@ def main():
         ax.legend(fontsize=10)
         ax.grid(True, alpha=0.3)
         out1 = os.path.join(OUT_ROOT, "validation_disagreement_hist.png")
-        out1r = os.path.join(REPORT_ROOT, "rq1_beta_validation_disagreement_hist.png")
         fig.savefig(out1, dpi=150, bbox_inches="tight")
-        fig.savefig(out1r, dpi=150, bbox_inches="tight")
         plt.close(fig)
         print(f"Saved {out1}")
-        print(f"Saved {out1r}")
 
         # 2) calibration curves: c vs delta (analytic) for all betas, with rug of actual deltas
         delta_grid = np.linspace(0.85, 1.15, 600)
@@ -214,12 +205,9 @@ def main():
         fig.suptitle(f"RQ1 Beta Calibration Curves (p90 D_ref={d_ref:.4f}, calibration deltas underlay)", fontsize=13)
         fig.tight_layout(rect=[0, 0.03, 1, 0.95])
         out2 = os.path.join(OUT_ROOT, "calibration_curves.png")
-        out2r = os.path.join(REPORT_ROOT, "rq1_beta_calibration_curves.png")
         fig.savefig(out2, dpi=150, bbox_inches="tight")
-        fig.savefig(out2r, dpi=150, bbox_inches="tight")
         plt.close(fig)
         print(f"Saved {out2}")
-        print(f"Saved {out2r}")
 
         # 3) histograms of c on calibration deltas, per beta (2 rows x 7 cols small multiples)
         fig, axes = plt.subplots(2, len(betas_sorted), figsize=(3*len(betas_sorted), 6), sharex=True, sharey=True)
@@ -246,12 +234,9 @@ def main():
         fig.suptitle(f"Calibration c histograms per beta (p90 D_ref={d_ref:.4f}, N={len(delta)})", fontsize=12)
         fig.tight_layout(rect=[0, 0.03, 1, 0.96])
         out3 = os.path.join(OUT_ROOT, "confidence_hist_by_beta.png")
-        out3r = os.path.join(REPORT_ROOT, "rq1_beta_confidence_hist_by_beta.png")
         fig.savefig(out3, dpi=150, bbox_inches="tight")
-        fig.savefig(out3r, dpi=150, bbox_inches="tight")
         plt.close(fig)
         print(f"Saved {out3}")
-        print(f"Saved {out3r}")
 
     except Exception as e:
         print(f"Plotting failed: {e}")

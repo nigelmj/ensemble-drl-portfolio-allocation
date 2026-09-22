@@ -1,15 +1,13 @@
 """
 RQ3 — Return vs Volatility scatter (9 points: v1..v6 + RQ2 floor + 2 BH baselines)
 
-Source: results/0rq3/backtest_performance_comparison.csv
+Source: results/rq3/backtest_performance_comparison.csv
   Row "Annual return" / "Annual volatility" for columns:
     v1..v6, RQ2 k10b20, Equal Weight (ew_buyhold), Mean Var (mvo_buyhold)
 
 Output:
-  results/0rq3/return_volatility_scatter.png
-  results/report/rq3_return_volatility_scatter.png
-  results/0rq3/return_volatility_scatter.csv
-  results/report/rq3_return_volatility_scatter.csv
+  results/rq3/return_volatility_scatter.png
+  results/rq3/return_volatility_scatter.csv
 
 Usage:
   python -m pipelines.rq3.rq3_risk_return_scatter
@@ -27,7 +25,6 @@ import pandas as pd
 from pipelines.rq3 import rq3_config
 
 RESULTS_ROOT = rq3_config.RESULTS_ROOT
-REPORT_ROOT = "results/report"
 
 VERSION_ORDER = rq3_config.VERSION_ORDER
 VERSION_ORDER_DISPLAY = [v.upper() for v in VERSION_ORDER]
@@ -51,7 +48,6 @@ V_COLORS = {v: VARIANT_COLOR for v in VERSION_ORDER}
 
 
 def main():
-    os.makedirs(REPORT_ROOT, exist_ok=True)
 
     csv_path = os.path.join(RESULTS_ROOT, "backtest_performance_comparison.csv")
     assert os.path.exists(csv_path), f"Missing {csv_path}"
@@ -85,11 +81,8 @@ def main():
 
     # Save CSV for report
     csv_out_0 = os.path.join(RESULTS_ROOT, "return_volatility_scatter.csv")
-    csv_out_r = os.path.join(REPORT_ROOT, "rq3_return_volatility_scatter.csv")
     scatter.to_csv(csv_out_0, index=False)
-    scatter.to_csv(csv_out_r, index=False)
     print(f"Saved {csv_out_0}")
-    print(f"Saved {csv_out_r}")
 
     fig, ax = plt.subplots(figsize=(9, 7))
 
@@ -153,12 +146,9 @@ def main():
 
     fig.tight_layout()
     out_0 = os.path.join(RESULTS_ROOT, "return_volatility_scatter.png")
-    out_r = os.path.join(REPORT_ROOT, "rq3_return_volatility_scatter.png")
     fig.savefig(out_0, dpi=300, bbox_inches="tight")
-    fig.savefig(out_r, dpi=300, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved {out_0} ({os.path.getsize(out_0)} bytes)")
-    print(f"Saved {out_r} ({os.path.getsize(out_r)} bytes)")
     print("Done.")
 
 

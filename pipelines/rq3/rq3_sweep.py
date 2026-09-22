@@ -4,7 +4,7 @@ RQ3 — sweep trailing window (k) x block tenure (block_days) per version (v1..v
 Mirrors RQ2 sweep (rq2_sweep.py) but for cross-model versions.
 Runs the block-mode ensemble over the 12-run grid for each of the 6
 versions (6 * 12 = 72 runs) and writes per-version summaries plus
-per-config account/actions/weights files into results/0rq3/sweeps/.
+per-config account/actions/weights files into results/rq3/sweeps/.
 
 Usage:
     python -m pipelines.rq3.rq3_sweep
@@ -12,10 +12,10 @@ Usage:
     python -m pipelines.rq3.rq3_sweep --k 10 20 --block 20 40
 
 Output:
-    results/0rq3/sweeps/sweep_summary_v{N}.csv            (6 files, 12 rows each)
-    results/0rq3/sweeps/account_value_{version}_k{k}b{block}.csv
-    results/0rq3/sweeps/actions_{version}_k{k}b{block}.csv
-    results/0rq3/sweeps/weights_{version}_k{k}b{block}.csv
+    results/rq3/sweeps/sweep_summary_v{N}.csv            (6 files, 12 rows each)
+    results/rq3/sweeps/account_value_{version}_k{k}b{block}.csv
+    results/rq3/sweeps/actions_{version}_k{k}b{block}.csv
+    results/rq3/sweeps/weights_{version}_k{k}b{block}.csv
 """
 from __future__ import annotations
 

@@ -5,9 +5,9 @@ Reuses already-trained ensemble at rq_trained_models/rq1 (5 seeds, 1M steps)
 and existing p90 calibration (D_ref≈1.0345 from 2019-2021). No retraining.
 
 Produces isolated outputs so canonical p2 results stay untouched:
-  results/0rq1_power16/combo_power16_{previous,equal_weight}/ {test_account.csv, test_actions.csv}
-  results/0rq1_power32/...
-  results/0rq1_power{p}/test_summary.csv, calibration copy, manifest snippet
+  results/rq1_power16/combo_power16_{previous,equal_weight}/ {test_account.csv, test_actions.csv}
+  results/rq1_power32/...
+  results/rq1_power{p}/test_summary.csv, calibration copy, manifest snippet
 
 Usage:
   python -m pipelines.rq1.rq1_power_sweep           # runs 16 & 32, both safes
@@ -68,7 +68,7 @@ def main():
 
     for power in args.powers:
         p_int = int(power) if power.is_integer() else str(power).replace(".", "p")
-        results_root = f"results/0rq1_power{p_int}"
+        results_root = f"results/rq1_power{p_int}"
         check_and_make_directories([results_root])
         # copy calibration for the run record
         dst_cal = os.path.join(results_root, "calibration_all.json")
@@ -84,7 +84,7 @@ def main():
             "d_ref": d_ref,
             "d_ref_method": rq1_config.D_REF_METHOD,
             "model_dir": f"{rq1_config.MODEL_DIR}{suffix}",
-            "note": "Isolated so canonical p2 (results/0rq1) untouched; separate test_summary.",
+            "note": "Isolated so canonical p2 (results/rq1) untouched; separate test_summary.",
         }
         with open(os.path.join(results_root, "manifest.json"), "w") as f:
             json.dump(manifest, f, indent=2)
@@ -137,7 +137,7 @@ def main():
         print(f"\nSummary saved to {summary_path}")
         print(summary[["label", "total_return", "sharpe", "max_drawdown", "mean_confidence", "mean_disagreement"]].round(4).to_string(index=False))
 
-    print("\nAll sweeps done. Compare to canonical p2 at results/0rq1/test_summary.csv")
+    print("\nAll sweeps done. Compare to canonical p2 at results/rq1/test_summary.csv")
 
 
 if __name__ == "__main__":

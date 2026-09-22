@@ -2,12 +2,11 @@
 RQ1 — 2x2 confidence/disagreement grids for the 4 confidence mappings.
 
 Generates:
-  - results/0rq1/confidence_disagreement_timeseries_2x2.png  (twin-axis, D + c per mapping)
-  - results/0rq1/confidence_timeseries_2x2.png               (confidence only per mapping)
+  - results/rq1/confidence_disagreement_timeseries_2x2.png  (twin-axis, D + c per mapping)
+  - results/rq1/confidence_timeseries_2x2.png               (confidence only per mapping)
 
-Copies are also written to results/report/ with rq1_ prefix.
 
-Data source: results/0rq1/combo_{mapping}_equal_weight/test_actions.csv
+Data source: results/rq1/combo_{mapping}_equal_weight/test_actions.csv
 Confidence depends only on D and d_ref (p90=1.0345) — safe_strategy
 has <1e-4 drift due to trajectory feedback, hence equal_weight is used
 as canonical representative.
@@ -27,8 +26,7 @@ import pandas as pd
 
 from pipelines.rq1 import rq1_config
 
-RESULTS_ROOT = rq1_config.RESULTS_ROOT  # results/0rq1
-REPORT_ROOT = "results/report"
+RESULTS_ROOT = rq1_config.RESULTS_ROOT  # results/rq1
 MAPPINGS = rq1_config.CONFIDENCE_MAPPINGS  # linear, power, exponential, sigmoid
 ORDER = ["linear", "power", "exponential", "sigmoid"]  # fixed 2x2 order
 COLOR_D = "#2a5c8a"
@@ -80,12 +78,9 @@ def plot_twin():
     )
     fig.tight_layout(rect=[0, 0.03, 1, 0.96])
     out_local = os.path.join(RESULTS_ROOT, "confidence_disagreement_timeseries_2x2.png")
-    out_report = os.path.join(REPORT_ROOT, "rq1_confidence_disagreement_timeseries_2x2.png")
     fig.savefig(out_local, dpi=150, bbox_inches="tight")
-    fig.savefig(out_report, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved {out_local}")
-    print(f"Saved {out_report}")
 
 
 def plot_confidence_only():
@@ -116,23 +111,19 @@ def plot_confidence_only():
     )
     fig.tight_layout(rect=[0, 0.03, 1, 0.96])
     out_local = os.path.join(RESULTS_ROOT, "confidence_timeseries_2x2.png")
-    out_report = os.path.join(REPORT_ROOT, "rq1_confidence_timeseries_2x2.png")
     fig.savefig(out_local, dpi=150, bbox_inches="tight")
-    fig.savefig(out_report, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved {out_local}")
-    print(f"Saved {out_report}")
 
 
 def main():
-    os.makedirs(REPORT_ROOT, exist_ok=True)
     # all four mappings must have results before plotting
     for m in ORDER:
         p = os.path.join(RESULTS_ROOT, f"combo_{m}_equal_weight", "test_actions.csv")
         assert os.path.exists(p), f"missing {p}"
     plot_twin()
     plot_confidence_only()
-    print("Done. Disagreement-only reuse: results/report/rq1_disagreement_histogram_p90.png")
+    print("Done.")
 
 
 if __name__ == "__main__":

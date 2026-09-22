@@ -18,7 +18,7 @@ import re
 import pandas as pd
 
 
-RESULTS_DIR = "results/0rq2"
+RESULTS_DIR = "results/rq2"
 SWEEP_DIR = os.path.join(RESULTS_DIR, "sweeps")
 
 

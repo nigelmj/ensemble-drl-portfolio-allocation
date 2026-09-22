@@ -2,7 +2,7 @@
 RQ2 — sweep metric window (k) x block tenure (block_days).
 
 Runs the block-mode ensemble over the 12-run grid and writes per-config
-account / actions / weights files plus two tables into results/0rq2/sweeps/.
+account / actions / weights files plus two tables into results/rq2/sweeps/.
 
 Usage:
     python -m pipelines.rq2.rq2_ensemble --mode block --k 10 --block-days 20
@@ -10,9 +10,9 @@ Usage:
     python -m pipelines.rq2.rq2_sweep --k 10 20 40 --block 5 10 20 40
 
 Output:
-    results/0rq2/sweeps/ensemble_sweep_summary.csv
-    results/0rq2/sweeps/ensemble_fee_sensitivity.csv
-    results/0rq2/sweeps/account_value_ensemble_pa_{tag}.csv (12 configs)
+    results/rq2/sweeps/ensemble_sweep_summary.csv
+    results/rq2/sweeps/ensemble_fee_sensitivity.csv
+    results/rq2/sweeps/account_value_ensemble_pa_{tag}.csv (12 configs)
 """
 from __future__ import annotations
 

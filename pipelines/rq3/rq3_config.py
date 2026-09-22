@@ -17,7 +17,7 @@ penalty scale as PPO's 1400 (see rq3_calibrate.py).
 
 Outputs (never overwrite existing results/models):
     models   -> rq_trained_models/rq3/
-    results  -> results/0rq3/ver_v1..v6/
+    results  -> results/rq3/ver_v1..v6/
 """
 from __future__ import annotations
 
@@ -108,7 +108,7 @@ RQ2_BLOCK_LABEL_DISPLAY = "RQ2 block ensemble"
 
 DATA_DIR = "data"
 MODEL_DIR = "rq_trained_models/rq3"
-RESULTS_ROOT = "results/0rq3"
+RESULTS_ROOT = "results/rq3"
 DATA_TRAIN = f"{DATA_DIR}/portfolio_allocation_train.pkl"
 DATA_TEST = f"{DATA_DIR}/portfolio_allocation_test.pkl"
 

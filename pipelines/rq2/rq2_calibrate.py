@@ -10,8 +10,8 @@ Usage:
     python -m pipelines.rq2.rq2_calibrate
 
 Output:
-    results/0rq2/calibration_dsr_scaling.txt
-    results/0rq2/calibration_dsr_scaling.json
+    results/rq2/calibration_dsr_scaling.txt
+    results/rq2/calibration_dsr_scaling.json
 """
 from __future__ import annotations
 

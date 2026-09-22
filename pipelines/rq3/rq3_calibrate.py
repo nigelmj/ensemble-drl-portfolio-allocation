@@ -21,7 +21,7 @@ Usage:
     python -m pipelines.rq3.rq3_calibrate
 
 Output:
-    results/0rq3/calibration_dsr.json
+    results/rq3/calibration_dsr.json
 """
 from __future__ import annotations
 

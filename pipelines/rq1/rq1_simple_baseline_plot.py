@@ -5,18 +5,17 @@ Clean 4-curve plot: Single PPO vs PPO ensemble (mean 5 PPO) vs
 Equal Weight Buy-and-Hold vs MVO Buy-and-Hold.
 
 Data (default 1M single):
-  results/0rq1/account_value_single_ppo.csv
-  results/0rq1/baseline_ensemble_average/test_account.csv
+  results/rq1/account_value_single_ppo.csv
+  results/rq1/baseline_ensemble_average/test_account.csv
   results/baselines/ew_buyhold.csv
   results/baselines/mvo_buyhold.csv
 
 Data (5M compute-matched, with --use-5m):
-  results/0rq1/account_value_single_ppo_5m.csv
+  results/rq1/account_value_single_ppo_5m.csv
   -> outputs are suffixed _5m so the 1M artefacts are never overwritten.
 
 Output:
-  results/0rq1/performance_comparison_single_ensemble_ppo.png[.csv]
-  results/report/rq1_performance_comparison_single_ensemble_ppo.png[.csv]
+  results/rq1/performance_comparison_single_ensemble_ppo.png[.csv]
   (+ _5m variants when --use-5m)
 
 Usage:
@@ -39,7 +38,6 @@ from pipelines.rq1 import rq1_config
 from rl_portfolio.utils.metrics import backtest_stats
 
 RESULTS_ROOT = rq1_config.RESULTS_ROOT
-REPORT_ROOT = "results/report"
 BASELINES_DIR = "results/baselines"
 
 
@@ -66,7 +64,6 @@ def load_account(path: str, col: str) -> pd.DataFrame:
 
 def main():
     args = parse_args()
-    os.makedirs(REPORT_ROOT, exist_ok=True)
 
     single_file = "account_value_single_ppo_5m.csv" if args.use_5m else "account_value_single_ppo.csv"
     single_label = "Single PPO"
@@ -114,11 +111,8 @@ def main():
     print(table)
 
     table_path_0 = os.path.join(RESULTS_ROOT, f"performance_comparison_single_ensemble_ppo{tag_suffix}.csv")
-    table_path_r = os.path.join(REPORT_ROOT, f"rq1_performance_comparison_single_ensemble_ppo{tag_suffix}.csv")
     table.to_csv(table_path_0)
-    table.to_csv(table_path_r)
     print(f"Saved {table_path_0}")
-    print(f"Saved {table_path_r}")
 
     # Plot
     plt.rcParams["figure.figsize"] = (15, 6)
@@ -163,12 +157,9 @@ def main():
 
     fig.tight_layout()
     out_0 = os.path.join(RESULTS_ROOT, f"performance_comparison_single_ensemble_ppo{tag_suffix}.png")
-    out_r = os.path.join(REPORT_ROOT, f"rq1_performance_comparison_single_ensemble_ppo{tag_suffix}.png")
     fig.savefig(out_0, dpi=150, bbox_inches="tight")
-    fig.savefig(out_r, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved {out_0} ({os.path.getsize(out_0)} bytes)")
-    print(f"Saved {out_r} ({os.path.getsize(out_r)} bytes)")
     print("Done.")
 
 

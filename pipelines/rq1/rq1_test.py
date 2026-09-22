@@ -18,13 +18,13 @@ Usage:
     python -m pipelines.rq1.rq1_test --single-model both   # both baselines in one summary (mixes)
 
 Output:
-    results/0rq1/combo_{mapping}_{safe}/test_account.csv
-    results/0rq1/combo_{mapping}_{safe}/test_actions.csv
-    results/0rq1/account_value_single_ppo.csv         (1M legacy)
-    results/0rq1/account_value_single_ppo_5m.csv      (5M compute-matched)
-    results/0rq1/actions_single_ppo.csv / actions_single_ppo_5m.csv
-    results/0rq1/test_summary.csv
-    results/0rq1/test_summary_single_5m.csv           (when --only-single + 5M)
+    results/rq1/combo_{mapping}_{safe}/test_account.csv
+    results/rq1/combo_{mapping}_{safe}/test_actions.csv
+    results/rq1/account_value_single_ppo.csv         (1M legacy)
+    results/rq1/account_value_single_ppo_5m.csv      (5M compute-matched)
+    results/rq1/actions_single_ppo.csv / actions_single_ppo_5m.csv
+    results/rq1/test_summary.csv
+    results/rq1/test_summary_single_5m.csv           (when --only-single + 5M)
 """
 from __future__ import annotations
 
@@ -59,7 +59,7 @@ def parse_args():
         "--results_root",
         default=rq1_config.RESULTS_ROOT,
         help="Output directory for accounts/actions/summary. "
-             "Use results/temp/0rq1 for stocks-only ablation.",
+             "Use results/temp/rq1 for stocks-only ablation.",
     )
     parser.add_argument(
         "--calibration_path",
@@ -168,7 +168,7 @@ def main():
     args = parse_args()
     suffix = f"_{args.tag}" if args.tag else ""
     results_root = args.results_root
-    # Calibration fallback: temp run reuses 0rq1 calibration
+    # Calibration fallback: temp run reuses rq1 calibration
     if args.calibration_path:
         calibration_path = args.calibration_path
     else:

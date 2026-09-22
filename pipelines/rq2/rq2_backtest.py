@@ -14,10 +14,10 @@ Usage:
     python -m pipelines.rq2.rq2_backtest
 
 Output:
-    results/0rq2/backtest_performance_comparison.csv
-    results/0rq2/backtest_result.png
-    results/0rq2/ensemble_agent_weights.png
-    results/0rq2/manifest.json
+    results/rq2/backtest_performance_comparison.csv
+    results/rq2/backtest_result.png
+    results/rq2/ensemble_agent_weights.png
+    results/rq2/manifest.json
 """
 from __future__ import annotations
 
@@ -217,7 +217,7 @@ def main():
             "soft": "k=10 (default in rq2_ensemble.py)",
             "hard": "daily one-hot",
             "block": "k=10, block_days=20 (k10b20 comparison floor)",
-            "sweep": "12-config grid results/0rq2/sweeps/",
+            "sweep": "12-config grid results/rq2/sweeps/",
         },
         "baselines": {
             "source": "results/baselines/ (compute_baselines.py)",

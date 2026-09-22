@@ -5,7 +5,7 @@ Runs the six reward-algo versions (v1..v6) of RQ3 under the block blend mode
 at the k10b20 configuration (the RQ2 sweep winner) over
 the shared test window (2022-2026). Each version is written to its own folder:
 
-    results/0rq3/ver_{vN}/
+    results/rq3/ver_{vN}/
         account_ensemble.csv
         actions_ensemble.csv
         weights_ensemble.csv
@@ -26,7 +26,7 @@ Usage:
     python -m pipelines.rq3.rq3_block_suite
 
 Output:
-    results/0rq3/ver_vN/*
+    results/rq3/ver_vN/*
 """
 from __future__ import annotations
 
@@ -59,7 +59,7 @@ K = 10
 BLOCK_DAYS = 20
 
 # RQ2's k10b20 sweep winner = the RQ3 comparison floor.
-RQ2_K10B20_ACCOUNT = "results/0rq2/sweeps/account_value_ensemble_pa_k10b20.csv"
+RQ2_K10B20_ACCOUNT = "results/rq2/sweeps/account_value_ensemble_pa_k10b20.csv"
 RQ2_K10B20_LABEL = "RQ2 k10b20"
 RQ2_K10B20_LABEL_DISPLAY = "RQ2 block ensemble"
 def _display_col(col: str) -> str:
